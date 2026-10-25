@@ -518,3 +518,6 @@ a.ad:hover { transform: translate(-2px, -2px); box-shadow: 10px 10px 0 var(--ink
   .ad { box-shadow: 6px 6px 0 var(--ink); }
   .ad__button { width: 100%; text-align: center; }
 }
+
+/* Sections focused by in-page links: no outline box */
+[tabindex="-1"]:focus { outline: none; }
