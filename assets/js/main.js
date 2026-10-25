@@ -86,6 +86,35 @@
     });
   }
 
+  /* ---------- In-page links: scroll without adding "#section" to the web address ---------- */
+  var smooth = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var link = e.target.closest('a[href^="#"]');
+    if (!link) return;
+    var id = link.getAttribute('href').slice(1);
+    var target = id ? document.getElementById(id) : null;
+    if (id && !target) return;
+    e.preventDefault();
+    if (!target || id === 'top') {
+      window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+    } else {
+      target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
+    }
+    // Move keyboard focus to the section too, for screen-reader and keyboard users.
+    var focusEl = target || document.getElementById('main');
+    if (focusEl) {
+      if (!focusEl.hasAttribute('tabindex')) focusEl.setAttribute('tabindex', '-1');
+      focusEl.focus({ preventScroll: true });
+    }
+    if (window.history && history.replaceState) history.replaceState(null, '', location.pathname + location.search);
+  });
+  // Old links that still end in "#something": tidy the address after arriving.
+  if (location.hash && window.history && history.replaceState) {
+    var tidy = function () { setTimeout(function () { history.replaceState(null, '', location.pathname + location.search); }, 300); };
+    if (document.readyState === 'complete') tidy(); else window.addEventListener('load', tidy);
+  }
+
   /* ---------- Footer year ---------- */
   var year = document.querySelector('[data-year]');
   if (year) year.textContent = new Date().getFullYear();
