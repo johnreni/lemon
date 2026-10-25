@@ -29,9 +29,24 @@ Projects (*Fresh work*) and the advert banner are edited with **Pages CMS**, a f
 
 The editor saves to `data/projects.json`, `data/ads.json` and uploaded pictures to `assets/uploads/`. Its settings are in `.pages.yml`.
 
+## Domain
+
+The site is hosted free on GitHub Pages and shown at **https://getlemondigital.com** (the `CNAME` file sets this).
+The domain is registered at Hostinger, whose DNS points it to GitHub:
+
+| Type | Name | Points to |
+|---|---|---|
+| A | @ | 185.199.108.153 |
+| A | @ | 185.199.109.153 |
+| A | @ | 185.199.110.153 |
+| A | @ | 185.199.111.153 |
+| CNAME | www | johnreni.github.io |
+
+Don't change the MX or email-related TXT records; those run your email.
+Nothing needs uploading to Hostinger: changes on GitHub or in Pages CMS go live on the domain automatically.
+
 ## Still to do
 
-- **Domain**: when `getlemondigital.com` points to this site, change the two `johnreni.github.io/lemon` addresses at the top of `index.html` to it.
 - **Social links**: none yet. Send them over and a *Follow* column can go back in the footer.
 
 ## Contact form
