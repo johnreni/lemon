@@ -373,3 +373,81 @@ a:hover { color: var(--leaf); }
 .not-found h1 { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: clamp(3rem, 8vw, 6rem); line-height: 0.95; letter-spacing: -0.04em; }
 .not-found p { margin: 0; font-size: 20px; line-height: 1.55; color: var(--text-muted); }
 .site-footer .wordmark:hover { color: var(--pith); }
+
+/* ---------- Hero intro: a whole lemon is sliced open (≈2s, plays once) ---------- */
+.hero__visual { perspective: 1000px; }
+
+.lemon-intro { position: absolute; inset: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 2; }
+.lemon-intro__whole {
+  position: relative; width: 380px; max-width: 80%; aspect-ratio: 120 / 100;
+  animation: lemon-drop .7s cubic-bezier(.34, 1.56, .64, 1) both;
+}
+.lemon-intro__half { position: absolute; inset: 0; }
+.lemon-intro__half svg { width: 100%; height: 100%; }
+.lemon-intro__half--left  { clip-path: inset(-10% 50% -10% -10%); animation: half-left .65s 1s cubic-bezier(.5, 0, .75, 0) both; }
+.lemon-intro__half--right { clip-path: inset(-10% -10% -10% 50%); animation: half-right .65s 1s cubic-bezier(.5, 0, .75, 0) both; }
+
+.lemon-intro__knife {
+  position: absolute; width: 5px; height: 70%; border-radius: 5px;
+  background: linear-gradient(to bottom, transparent, var(--ink) 30%, var(--ink) 70%, transparent);
+  animation: knife .4s .65s ease-in both;
+}
+
+.lemon-intro__drop {
+  position: absolute; width: 12px; height: 12px; border-radius: 50% 50% 50% 0; background: var(--zest);
+  border: 2px solid var(--ink); animation: drop-burst .7s 1s ease-out both;
+}
+
+/* The cut face (the brand slice) turns toward the viewer as the halves fall away */
+.hero__lemon { animation: slice-reveal .85s 1.05s cubic-bezier(.22, 1, .36, 1) both; }
+.hero__disc  { animation: disc-in .7s 1.05s cubic-bezier(.22, 1, .36, 1) both; }
+.tag { animation: tag-pop .45s cubic-bezier(.34, 1.56, .64, 1) both; }
+.tag--1 { animation-delay: 1.55s; }
+.tag--2 { animation-delay: 1.65s; }
+.tag--3 { animation-delay: 1.75s; }
+.tag--4 { animation-delay: 1.85s; }
+
+@keyframes lemon-drop {
+  from { opacity: 0; transform: translateY(-80px) rotate(-12deg); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes knife {
+  0%   { opacity: 0; transform: translateY(-90%) rotate(8deg); }
+  25%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(90%) rotate(8deg); }
+}
+@keyframes half-left {
+  from { transform: none; opacity: 1; }
+  to   { transform: translateX(-55%) translateY(30px) rotate(-24deg); opacity: 0; }
+}
+@keyframes half-right {
+  from { transform: none; opacity: 1; }
+  to   { transform: translateX(55%) translateY(30px) rotate(24deg); opacity: 0; }
+}
+@keyframes drop-burst {
+  0%   { opacity: 0; transform: translate(0, 0) scale(.4) rotate(-45deg); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1) rotate(-45deg); }
+}
+@keyframes slice-reveal {
+  from { opacity: 0; transform: perspective(900px) rotateY(80deg) rotate(14deg) scale(.55); }
+  to   { opacity: 1; transform: perspective(900px) rotateY(0deg) rotate(14deg) scale(1); }
+}
+@keyframes disc-in {
+  from { opacity: 0; transform: scale(.4); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes tag-pop {
+  from { opacity: 0; scale: .5; }
+  to   { opacity: 1; scale: 1; }
+}
+
+@media (max-width: 600px) {
+  .lemon-intro__drop { width: 9px; height: 9px; }
+}
+
+/* Visitors who prefer less motion see the finished design straight away */
+@media (prefers-reduced-motion: reduce) {
+  .lemon-intro { display: none; }
+  .hero__lemon, .hero__disc, .tag { animation: none; }
+}

@@ -36,6 +36,22 @@
       <path d="M51.60 43.00L51.60 13.00A37 37 0 0 1 75.03 22.71L53.82 43.92ZM56.08 46.18L77.29 24.97A37 37 0 0 1 87.00 48.40L57.00 48.40ZM57.00 51.60L87.00 51.60A37 37 0 0 1 77.29 75.03L56.08 53.82ZM53.82 56.08L75.03 77.29A37 37 0 0 1 51.60 87.00L51.60 57.00ZM48.40 57.00L48.40 87.00A37 37 0 0 1 24.97 77.29L46.18 56.08ZM43.92 53.82L22.71 75.03A37 37 0 0 1 13.00 51.60L43.00 51.60ZM43.00 48.40L13.00 48.40A37 37 0 0 1 22.71 24.97L43.92 46.18ZM46.18 43.92L24.97 22.71A37 37 0 0 1 48.40 13.00L48.40 43.00Z" fill="#FFD93D" stroke="#FFD93D" stroke-width="2.5" stroke-linejoin="round"/>
       <circle cx="50" cy="50" r="3.2" fill="#FFF8DC"/>
     </symbol>
+    <!-- Whole lemon, side view (used by the intro animation) -->
+    <symbol id="lemon-whole" viewBox="0 0 120 100">
+      <defs>
+        <radialGradient id="lw-shade" cx="42%" cy="35%" r="70%">
+          <stop offset="0" stop-color="#FFE77A"/>
+          <stop offset=".55" stop-color="#FFD93D"/>
+          <stop offset="1" stop-color="#F5B700"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="7" cy="52" rx="6" ry="5" fill="#F5B700"/>
+      <ellipse cx="113" cy="48" rx="6" ry="5" fill="#F5B700"/>
+      <path d="M8 52C8 26 34 12 60 12C86 12 112 24 112 48C112 74 86 88 60 88C34 88 8 78 8 52Z" fill="url(#lw-shade)"/>
+      <ellipse cx="44" cy="32" rx="16" ry="7" fill="#FFFFFF" opacity=".45" transform="rotate(-14 44 32)"/>
+      <g fill="#F5B700" opacity=".55"><circle cx="70" cy="30" r="1"/><circle cx="82" cy="40" r="1"/><circle cx="58" cy="62" r="1"/><circle cx="78" cy="68" r="1"/><circle cx="36" cy="58" r="1"/><circle cx="92" cy="58" r="1"/></g>
+      <path d="M100 30C104 16 116 10 118 12C118 22 110 30 100 30Z" fill="#2E6B3F"/>
+    </symbol>
   </svg>
 
   <a class="skip-link" href="#main">Skip to content</a>
@@ -72,6 +88,23 @@
       </div>
       <div class="hero__visual">
         <div class="hero__disc" aria-hidden="true"></div>
+
+        <!-- Intro animation: a whole lemon drops in, gets sliced, and opens to show the slice below.
+             Purely decorative; hidden for visitors who prefer reduced motion. -->
+        <div class="lemon-intro" aria-hidden="true">
+          <div class="lemon-intro__whole">
+            <div class="lemon-intro__half lemon-intro__half--left"><svg viewBox="0 0 120 100"><use href="#lemon-whole"/></svg></div>
+            <div class="lemon-intro__half lemon-intro__half--right"><svg viewBox="0 0 120 100"><use href="#lemon-whole"/></svg></div>
+          </div>
+          <div class="lemon-intro__knife"></div>
+          <span class="lemon-intro__drop" style="--dx:-120px;--dy:-90px"></span>
+          <span class="lemon-intro__drop" style="--dx:110px;--dy:-110px"></span>
+          <span class="lemon-intro__drop" style="--dx:-150px;--dy:30px"></span>
+          <span class="lemon-intro__drop" style="--dx:140px;--dy:50px"></span>
+          <span class="lemon-intro__drop" style="--dx:-40px;--dy:-140px"></span>
+          <span class="lemon-intro__drop" style="--dx:50px;--dy:130px"></span>
+        </div>
+
         <svg class="hero__lemon" viewBox="0 0 100 100" role="img" aria-label="A sliced lemon"><use href="#lemon-slice"/></svg>
         <span class="tag tag--1">Google Ads</span>
         <span class="tag tag--2">SEO</span>
