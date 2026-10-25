@@ -7,12 +7,12 @@
   <meta name="description" content="LEMON builds your website and app, runs your Google and Meta ads, grows your search ranking and social channels, and designs everything in between — one team, one plan, one zesty report.">
   <meta name="theme-color" content="#FFF8DC">
 
-  <!-- Social sharing preview (EDIT: replace https://www.yourdomain.com with your real web address) -->
+  <!-- Social sharing preview. When getlemondigital.com points to this site, change both addresses below to it. -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="LEMON — Fresh-squeezed growth">
   <meta property="og:description" content="Websites, apps, Google & Meta ads, SEO, social media and design — one team, one plan, one zesty report.">
-  <meta property="og:image" content="https://www.yourdomain.com/assets/img/og-image.png">
-  <meta property="og:url" content="https://www.yourdomain.com/">
+  <meta property="og:image" content="https://johnreni.github.io/lemon/assets/img/og-image.png">
+  <meta property="og:url" content="https://johnreni.github.io/lemon/">
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
@@ -195,54 +195,56 @@
     </section>
 
     <!-- WORK
-         EDIT: to add a real project photo, replace "[Project image]" inside a .project__media box with
-         <img src="assets/img/work/your-photo.jpg" alt="Short description of the project">  -->
+         Projects come from data/projects.json (edit them at app.pagescms.org — see README).
+         The cards below are only shown if that file can't be loaded. -->
     <section id="work" class="work container">
       <div class="section-head">
         <h2 class="h2">Fresh work.</h2>
-        <a href="#work" class="work__all">View all projects →</a>
+        <a href="#contact" class="work__all">Start yours →</a>
       </div>
-      <div class="card-grid">
-        <a href="#work" class="project">
-          <div class="project__media project__media--zest">[Project image]</div>
-          <span class="project__meta">Website · SEO</span>
-          <strong>[Client name]</strong>
+      <div class="card-grid" data-projects>
+        <a href="https://drakoelectronics.com" class="project" target="_blank" rel="noopener">
+          <div class="project__media project__media--ink"><span class="project__site">drakoelectronics.com</span></div>
+          <span class="project__meta">Website</span>
+          <strong>Drako Electronics <span class="project__ext" aria-hidden="true">↗</span></strong>
         </a>
-        <a href="#work" class="project">
-          <div class="project__media project__media--leaf">[Project image]</div>
-          <span class="project__meta">Meta Ads · Social</span>
-          <strong>[Client name]</strong>
-        </a>
-        <a href="#work" class="project">
-          <div class="project__media project__media--ink">[Project image]</div>
-          <span class="project__meta">Brand identity · App</span>
-          <strong>[Client name]</strong>
+        <a href="#contact" class="project project--next">
+          <div class="project__media project__media--next"><span class="project__next-icon" aria-hidden="true">+</span><span>Your project here</span></div>
+          <span class="project__meta">Websites · Ads · SEO · Social · Design</span>
+          <strong>Next up: your brand</strong>
         </a>
       </div>
     </section>
 
+    <!-- ADVERT BANNER
+         Filled from data/ads.json (edit at app.pagescms.org — see README). Hidden when no advert is switched on. -->
+    <aside class="ad-slot container" aria-label="Advertisement" data-ads hidden></aside>
+
     <!-- PACKAGES -->
     <section id="packages" class="packages container">
-      <h2 class="h2">Choose your squeeze.</h2>
+      <div class="section-head">
+        <h2 class="h2">Choose your squeeze.</h2>
+        <p>Every project starts with a free audit. You then get a clear, tailored quote for exactly what your business needs — no surprise invoices.</p>
+      </div>
       <div class="card-grid">
         <div class="package">
           <strong class="package__name">Slice</strong>
           <span class="package__for">For new businesses getting online</span>
-          <span class="package__price">[YOUR PRICE]</span>
+          <span class="package__headline">Get online, fast.</span>
           <ul><li>Logo &amp; starter brand kit</li><li>5-page website</li><li>Google Business Profile</li></ul>
-          <a href="#contact" class="btn btn--ghost" data-package="Slice">Choose Slice</a>
+          <a href="#contact" class="btn btn--ghost" data-package="Slice">Get a quote</a>
         </div>
         <div class="package package--featured">
           <div class="package__top"><strong class="package__name">Squeeze</strong><span class="package__badge">Most popular</span></div>
           <span class="package__for">For brands ready to grow every month</span>
-          <span class="package__price">[YOUR PRICE]<small> / month</small></span>
-          <ul><li>Google or Meta ads management</li><li>Social media: [X] posts a month</li><li>SEO essentials &amp; monthly report</li></ul>
-          <a href="#contact" class="btn btn--ink" data-package="Squeeze">Choose Squeeze</a>
+          <span class="package__headline">Grow every month.</span>
+          <ul><li>Google or Meta ads management</li><li>Social media content &amp; posting</li><li>SEO essentials &amp; monthly report</li></ul>
+          <a href="#contact" class="btn btn--ink" data-package="Squeeze">Get a quote</a>
         </div>
         <div class="package">
           <strong class="package__name">Whole Lemon</strong>
           <span class="package__for">Full digital team, fully managed</span>
-          <span class="package__price">Custom quote</span>
+          <span class="package__headline">Your whole digital team.</span>
           <ul><li>Website or app build</li><li>Google + Meta ads, SEO &amp; social</li><li>Dedicated designer</li></ul>
           <a href="#contact" class="btn btn--ghost" data-package="Whole Lemon">Talk to us</a>
         </div>
@@ -255,18 +257,18 @@
         <div class="contact__intro">
           <h2>Got lemons? Let’s talk.</h2>
           <p>Tell us what you need and we’ll come back with a free audit and a plan.</p>
-          <!-- EDIT: your real email, phone and city -->
           <address class="contact__details">
-            <a href="mailto:hello@yourdomain.com">[hello@yourdomain.com]</a>
-            <a href="tel:+000000000000">[+000 000 000 000]</a>
-            <span>[City, Country]</span>
+            <a href="mailto:info@getlemondigital.com">info@getlemondigital.com</a>
+            <span><a href="tel:+237656433069">+237 656 433 069</a> <span class="contact__where">· Cameroon</span></span>
+            <span><a href="tel:+9716506872045">+971 650 687 2045</a> <span class="contact__where">· UAE</span></span>
+            <span class="contact__offices">Douala · Brussels · Abu Dhabi</span>
           </address>
         </div>
 
         <!-- EDIT: data-email is where enquiries go.
              Optional: paste a Formspree (or similar) form URL into action="" to receive messages
              without opening the visitor's email app. Leave action="" empty to use email. -->
-        <form class="contact-form" action="" method="POST" data-email="hello@yourdomain.com" novalidate>
+        <form class="contact-form" action="" method="POST" data-email="info@getlemondigital.com" novalidate>
           <label class="field">Name<input type="text" name="name" placeholder="Your name" autocomplete="name" required></label>
           <label class="field">Email<input type="email" name="email" placeholder="you@company.com" autocomplete="email" required></label>
           <label class="field field--full">What do you need?
@@ -301,11 +303,10 @@
         <div class="site-footer__cols">
           <nav class="site-footer__col" aria-label="Services"><strong>Services</strong><a href="#services">Websites &amp; Apps</a><a href="#services">Google Ads</a><a href="#services">Meta Ads</a><a href="#services">SEO</a><a href="#services">Social Media</a><a href="#services">Graphic Design</a></nav>
           <nav class="site-footer__col" aria-label="Studio"><strong>Studio</strong><a href="#process">Process</a><a href="#work">Work</a><a href="#packages">Packages</a><a href="#contact">Contact</a></nav>
-          <!-- EDIT: replace each "#top" with your social profile link -->
-          <nav class="site-footer__col" aria-label="Follow"><strong>Follow</strong><a href="#top">Instagram</a><a href="#top">Facebook</a><a href="#top">LinkedIn</a><a href="#top">TikTok</a></nav>
+          <div class="site-footer__col"><strong>Offices</strong><span>Douala, Cameroon</span><span>Brussels, Belgium</span><span>Abu Dhabi, UAE</span><a href="mailto:info@getlemondigital.com">info@getlemondigital.com</a></div>
         </div>
       </div>
-      <div class="site-footer__bottom"><span>© <span data-year>2026</span> LEMON. All rights reserved.</span><span>Made with zest.</span></div>
+      <div class="site-footer__bottom"><span>© <span data-year>2026</span> LEMON. All rights reserved.</span><span>Made by Fowe Douliak aka John Reni</span></div>
     </div>
   </footer>
 

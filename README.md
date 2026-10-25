@@ -12,19 +12,27 @@ It's a plain HTML/CSS website: no build step, no installs. Every file can be edi
 | `assets/js/main.js` | Mobile menu, contact form, footer year |
 | `assets/img/` | Favicon, app icons and the social-share image (`og-image.png`) |
 | `404.html` | "Page not found" page |
+| `data/` | Projects and adverts (edited with Pages CMS) |
 | `design-source/` | Your original Claude Design exports, kept for reference (not used by the site) |
 
-## Things to fill in before launch
+## Updating projects and adverts (no code)
 
-Search `index.html` for `[` and `EDIT:` to find them all.
+Projects (*Fresh work*) and the advert banner are edited with **Pages CMS**, a free online editor for GitHub sites.
 
-1. **Prices**: `[YOUR PRICE]` (twice) and `[X]` posts a month in *Packages*.
-2. **Contact details**: `[hello@yourdomain.com]`, `[+000 000 000 000]`, `[City, Country]`. Update the `mailto:` and `tel:` links too.
-3. **Form email**: `data-email="hello@yourdomain.com"` on the contact form.
-4. **Projects**: `[Client name]` and `[Project image]` in *Fresh work*. Upload photos to `assets/img/` and swap the placeholder text for
-   `<img src="assets/img/your-photo.jpg" alt="What the project is">`.
-5. **Social links**: in the footer *Follow* column, replace each `href="#top"` with your profile URL.
-6. **Web address**: in the `<head>`, replace `https://www.yourdomain.com` (2 places) so link previews show the right image.
+1. Go to **https://app.pagescms.org** and click **Sign in with GitHub**.
+2. The first time, allow Pages CMS to access the `johnreni/lemon` repository.
+3. Open **johnreni/lemon** and choose the `main` branch.
+4. In the left menu:
+   - **Projects (Fresh work)**: add, edit, reorder or remove projects. You can upload a picture for each one.
+   - **Advert banner**: change the text, button, link or colour; upload a banner picture; or switch an advert off. If several adverts are switched on, they take turns.
+5. Click **Save**. The live site updates within a minute or two.
+
+The editor saves to `data/projects.json`, `data/ads.json` and uploaded pictures to `assets/uploads/`. Its settings are in `.pages.yml`.
+
+## Still to do
+
+- **Domain**: when `getlemondigital.com` points to this site, change the two `johnreni.github.io/lemon` addresses at the top of `index.html` to it.
+- **Social links**: none yet. Send them over and a *Follow* column can go back in the footer.
 
 ## Contact form
 

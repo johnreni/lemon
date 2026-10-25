@@ -1,0 +1,14 @@
+{
+  "ads": [
+    {
+      "show": true,
+      "label": "Offer",
+      "headline": "Free website & ads audit",
+      "text": "We review your website, ads and social channels and send you a clear plan to grow — free, no strings attached.",
+      "button_text": "Get my free audit",
+      "link": "#contact",
+      "image": "",
+      "style": "ink"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+# Settings for the online editor at https://app.pagescms.org
+# It lets you update projects and adverts from your browser (see README).
+
+media:
+  input: assets/uploads
+  output: assets/uploads
+
+content:
+  - name: projects
+    label: Projects (Fresh work)
+    type: file
+    path: data/projects.json
+    fields:
+      - name: projects
+        label: Projects — the first one appears first on the site
+        type: object
+        list: true
+        fields:
+          - name: title
+            label: Client or project name
+            type: string
+            required: true
+          - name: services
+            label: "What you did (for example: Website · SEO)"
+            type: string
+          - name: link
+            label: "Website link (for example: https://drakoelectronics.com) — optional"
+            type: string
+          - name: image
+            label: Picture — optional, landscape works best (about 1200 × 900)
+            type: image
+          - name: colour
+            label: Card colour (used when there is no picture)
+            type: select
+            options:
+              values:
+                - { value: ink, label: Ink (dark) }
+                - { value: zest, label: Zest (yellow) }
+                - { value: leaf, label: Leaf (green) }
+
+  - name: adverts
+    label: Advert banner
+    type: file
+    path: data/ads.json
+    fields:
+      - name: ads
+        label: Adverts — if several are switched on, they take turns
+        type: object
+        list: true
+        fields:
+          - name: show
+            label: Show this advert on the site
+            type: boolean
+          - name: label
+            label: "Small label (for example: Offer, Sponsored, New)"
+            type: string
+          - name: headline
+            label: Headline
+            type: string
+            required: true
+          - name: text
+            label: Short description
+            type: text
+          - name: button_text
+            label: Button text
+            type: string
+          - name: link
+            label: "Button link (a web address, or #contact for your contact form)"
+            type: string
+          - name: image
+            label: "Banner picture — optional. If added, the picture is shown instead of the text design (wide, about 1200 × 300)"
+            type: image
+          - name: style
+            label: Colour style (for text adverts)
+            type: select
+            options:
+              values:
+                - { value: ink, label: Ink (dark) }
+                - { value: zest, label: Zest (yellow) }
+                - { value: leaf, label: Leaf (green) }

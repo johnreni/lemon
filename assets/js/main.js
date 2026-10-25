@@ -90,3 +90,145 @@
   var year = document.querySelector('[data-year]');
   if (year) year.textContent = new Date().getFullYear();
 })();
+
+/* LEMON — projects and advert banner, loaded from data/*.json (edited with Pages CMS). */
+(function () {
+  'use strict';
+
+  var COLOURS = ['ink', 'zest', 'leaf'];
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function el(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text) node.textContent = text;
+    return node;
+  }
+  function clean(v) { return typeof v === 'string' ? v.trim() : ''; }
+  // Only allow normal web links, email/phone links and on-page links.
+  function safeLink(url) {
+    url = clean(url);
+    if (!url) return '';
+    if (/^(https?:|mailto:|tel:|#)/i.test(url)) return url;
+    if (/^[a-z0-9.-]+\.[a-z]{2,}(\/.*)?$/i.test(url)) return 'https://' + url; // "example.com" -> https://example.com
+    return '';
+  }
+  function isExternal(url) { return /^https?:/i.test(url); }
+  function colour(v) { return COLOURS.indexOf(v) > -1 ? v : 'ink'; }
+  function load(path) {
+    return fetch(path, { cache: 'no-cache' }).then(function (r) {
+      if (!r.ok) throw new Error(path);
+      return r.json();
+    });
+  }
+
+  /* ---------- Projects ---------- */
+  var grid = document.querySelector('[data-projects]');
+  if (grid) {
+    load('data/projects.json').then(function (data) {
+      var items = (data && Array.isArray(data.projects) ? data.projects : []).filter(function (p) { return clean(p.title); });
+      if (!items.length) return; // keep the built-in cards
+      var nextCard = grid.querySelector('.project--next');
+      grid.textContent = '';
+      items.forEach(function (p) {
+        var link = safeLink(p.link);
+        var card = el(link ? 'a' : 'div', 'project');
+        if (link) {
+          card.href = link;
+          if (isExternal(link)) { card.target = '_blank'; card.rel = 'noopener'; }
+        }
+        var media = el('div', 'project__media project__media--' + colour(p.colour));
+        var img = clean(p.image);
+        if (img) {
+          var image = el('img');
+          image.src = img;
+          image.alt = clean(p.title) + ' — project preview';
+          image.loading = 'lazy';
+          media.appendChild(image);
+        } else {
+          media.appendChild(el('span', 'project__site', link && isExternal(link) ? link.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '') : clean(p.title)));
+        }
+        card.appendChild(media);
+        if (clean(p.services)) card.appendChild(el('span', 'project__meta', clean(p.services)));
+        var title = el('strong', null, clean(p.title));
+        if (link && isExternal(link)) {
+          title.appendChild(document.createTextNode(' '));
+          var arrow = el('span', 'project__ext', '↗');
+          arrow.setAttribute('aria-hidden', 'true');
+          title.appendChild(arrow);
+        }
+        card.appendChild(title);
+        grid.appendChild(card);
+      });
+      // Keep the "your project here" card while there are fewer than 3 projects.
+      if (nextCard && items.length % 3 !== 0) grid.appendChild(nextCard);
+    }).catch(function () { /* keep the built-in cards */ });
+  }
+
+  /* ---------- Advert banner ---------- */
+  var slot = document.querySelector('[data-ads]');
+  if (slot) {
+    load('data/ads.json').then(function (data) {
+      var ads = (data && Array.isArray(data.ads) ? data.ads : []).filter(function (a) {
+        return a.show !== false && (clean(a.headline) || clean(a.image));
+      });
+      if (!ads.length) return;
+
+      var slides = ads.map(function (a) {
+        var link = safeLink(a.link);
+        var img = clean(a.image);
+        var slide;
+        if (img) {
+          slide = el(link ? 'a' : 'div', 'ad ad--image');
+          var image = el('img');
+          image.src = img;
+          image.alt = clean(a.headline) || 'Advertisement';
+          image.loading = 'lazy';
+          slide.appendChild(image);
+          if (clean(a.label)) slide.appendChild(el('span', 'ad__label ad__label--float', clean(a.label)));
+        } else {
+          slide = el(link ? 'a' : 'div', 'ad ad--' + colour(a.style));
+          var copy = el('div', 'ad__copy');
+          if (clean(a.label)) copy.appendChild(el('span', 'ad__label', clean(a.label)));
+          copy.appendChild(el('strong', 'ad__headline', clean(a.headline)));
+          if (clean(a.text)) copy.appendChild(el('span', 'ad__text', clean(a.text)));
+          slide.appendChild(copy);
+          if (link && clean(a.button_text)) slide.appendChild(el('span', 'ad__button', clean(a.button_text) + ' →'));
+        }
+        if (link) {
+          slide.href = link;
+          if (isExternal(link)) { slide.target = '_blank'; slide.rel = 'noopener sponsored'; }
+        }
+        return slide;
+      });
+
+      slides.forEach(function (s, i) { if (i) s.hidden = true; slot.appendChild(s); });
+      slot.hidden = false;
+
+      // Several adverts: show each for 7 seconds; pause while the visitor hovers or focuses the banner.
+      if (slides.length > 1) {
+        var dots = el('div', 'ad-dots');
+        var current = 0, paused = false;
+        var show = function (n) {
+          slides[current].hidden = true; dots.children[current].setAttribute('aria-current', 'false');
+          current = (n + slides.length) % slides.length;
+          slides[current].hidden = false; dots.children[current].setAttribute('aria-current', 'true');
+        };
+        slides.forEach(function (_, i) {
+          var b = el('button', 'ad-dot');
+          b.type = 'button';
+          b.setAttribute('aria-label', 'Show advert ' + (i + 1));
+          b.setAttribute('aria-current', i === 0 ? 'true' : 'false');
+          b.addEventListener('click', function () { show(i); });
+          dots.appendChild(b);
+        });
+        slot.appendChild(dots);
+        slot.addEventListener('mouseenter', function () { paused = true; });
+        slot.addEventListener('mouseleave', function () { paused = false; });
+        slot.addEventListener('focusin', function () { paused = true; });
+        slot.addEventListener('focusout', function () { paused = false; });
+        if (!reduceMotion) setInterval(function () { if (!paused && !document.hidden) show(current + 1); }, 7000);
+      }
+    }).catch(function () { /* no banner */ });
+  }
+})();

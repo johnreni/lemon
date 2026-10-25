@@ -247,7 +247,7 @@ a:hover { color: var(--leaf); }
 .work { padding-top: 100px; padding-bottom: 100px; display: flex; flex-direction: column; gap: 40px; }
 .work .section-head { gap: 20px; }
 .work__all { font-weight: 700; font-size: 17px; }
-.work .card-grid { grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
+.work .card-grid { grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); }
 .project { text-decoration: none; display: flex; flex-direction: column; gap: 14px; }
 .project:hover { color: var(--ink); }
 .project__media {
@@ -450,4 +450,71 @@ a:hover { color: var(--leaf); }
 @media (prefers-reduced-motion: reduce) {
   .lemon-intro { display: none; }
   .hero__lemon, .hero__disc, .tag { animation: none; }
+}
+
+/* ---------- Work: project cards from data/projects.json ---------- */
+.project__site {
+  font-family: var(--font-display); font-weight: 800; font-size: clamp(22px, 2.4vw, 30px);
+  letter-spacing: -0.02em; padding: 0 24px; text-align: center; overflow-wrap: anywhere;
+}
+.project__ext { font-family: var(--font-body); font-size: 0.7em; color: var(--leaf); }
+.project__media--next {
+  background: transparent; border-style: dashed; color: var(--text-muted);
+  flex-direction: column; gap: 10px; font-size: 18px;
+}
+.project__next-icon {
+  width: 56px; height: 56px; border-radius: 16px; background: var(--zest); color: var(--ink);
+  display: flex; align-items: center; justify-content: center; font-size: 32px; line-height: 1;
+}
+.project--next:hover .project__media--next { background: var(--white); }
+
+/* ---------- Packages: headline instead of price ---------- */
+.package__headline { font-family: var(--font-display); font-weight: 800; font-size: 34px; line-height: 1.05; letter-spacing: -0.02em; }
+
+/* ---------- Contact & footer details ---------- */
+.contact__where { font-weight: 400; color: var(--text-on-zest); }
+.contact__offices { margin-top: 4px; font-weight: 700; }
+.site-footer__col span { color: var(--pith); }
+
+/* ---------- Advert banner (data/ads.json) ---------- */
+.ad-slot { padding-bottom: 100px; position: relative; }
+.ad-slot[hidden] { display: none; }
+.ad {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px 32px;
+  padding: clamp(24px, 4vw, 40px) clamp(24px, 4vw, 48px); border: 2px solid var(--ink); border-radius: 26px;
+  text-decoration: none; box-shadow: 8px 8px 0 var(--ink);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.ad[hidden] { display: none; }
+a.ad:hover { transform: translate(-2px, -2px); box-shadow: 10px 10px 0 var(--ink); }
+@media (prefers-reduced-motion: reduce) { .ad, a.ad:hover { transform: none; transition: none; } }
+.ad--ink  { background: var(--ink);  color: var(--pith); }
+.ad--zest { background: var(--zest); color: var(--ink); }
+.ad--leaf { background: var(--leaf); color: var(--pith); }
+.ad--ink:hover, .ad--leaf:hover { color: var(--pith); }
+.ad--zest:hover { color: var(--ink); }
+.ad__copy { flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.ad__label {
+  padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  background: var(--zest); color: var(--ink);
+}
+.ad--zest .ad__label { background: var(--ink); color: var(--zest); }
+.ad__headline { font-family: var(--font-display); font-weight: 800; font-size: clamp(28px, 3.4vw, 44px); line-height: 1; letter-spacing: -0.03em; }
+.ad__text { font-size: 17px; line-height: 1.55; max-width: 620px; opacity: .9; }
+.ad--ink .ad__text { color: var(--text-on-ink); opacity: 1; }
+.ad__button {
+  flex-shrink: 0; padding: 16px 26px; border-radius: 999px; border: 2px solid var(--ink);
+  background: var(--zest); color: var(--ink); font-weight: 700; font-size: 17px;
+}
+.ad--zest .ad__button { background: var(--ink); color: var(--pith); }
+.ad--image { position: relative; display: block; padding: 0; overflow: hidden; }
+.ad--image img { width: 100%; height: auto; display: block; }
+.ad__label--float { position: absolute; top: 14px; left: 14px; }
+.ad-dots { display: flex; justify-content: center; gap: 8px; margin-top: 18px; }
+.ad-dot { width: 12px; height: 12px; padding: 0; border-radius: 50%; border: 2px solid var(--ink); background: transparent; cursor: pointer; }
+.ad-dot[aria-current="true"] { background: var(--ink); }
+@media (max-width: 600px) {
+  .ad-slot { padding-bottom: 72px; }
+  .ad { box-shadow: 6px 6px 0 var(--ink); }
+  .ad__button { width: 100%; text-align: center; }
 }
