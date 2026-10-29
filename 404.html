@@ -8,9 +8,7 @@
   <!-- Works both at username.github.io/repo/ and on a custom domain -->
   <script>(function(){var h=location.hostname,b='/';if(/\.github\.io$/.test(h)){var p=location.pathname.split('/')[1];if(p)b='/'+p+'/';}document.write('<base href="'+b+'">');})();</script>
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=DM+Sans:wght@400;500;700&amp;display=swap">
+  <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
@@ -23,7 +21,11 @@
     <span class="eyebrow"><span class="eyebrow__dot" aria-hidden="true"></span>Error 404</span>
     <h1>This page went <span class="highlight">sour</span>.</h1>
     <p>We couldn’t find what you were looking for. Let’s get you back to the fresh stuff.</p>
-    <a href="./" class="btn btn--zest">Back to home</a>
+    <p lang="fr">Cette page n’existe pas (ou plus). Retournez à l’accueil pour retrouver tout ce qui est frais.</p>
+    <div class="hero__actions">
+      <a href="./" class="btn btn--zest">Back to home</a>
+      <a href="fr/" class="btn btn--ghost" lang="fr">Accueil en français</a>
+    </div>
   </main>
 </body>
 </html>

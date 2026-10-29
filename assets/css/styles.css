@@ -521,3 +521,94 @@ a.ad:hover { transform: translate(-2px, -2px); box-shadow: 10px 10px 0 var(--ink
 
 /* Sections focused by in-page links: no outline box */
 [tabindex="-1"]:focus { outline: none; }
+
+/* ---------- Language switch ---------- */
+.main-nav .nav-lang {
+  margin-left: 4px; padding: 8px 12px; border: 2px solid var(--ink); border-radius: 999px;
+  font-weight: 700; font-size: 14px; letter-spacing: 0.04em;
+}
+.main-nav .nav-lang:hover { background: var(--white); color: var(--ink); }
+@media (max-width: 820px) {
+  .js .main-nav .nav-lang { margin: 0; align-self: flex-start; }
+}
+
+/* ---------- Clients (data/testimonials.json) ---------- */
+.clients { padding-bottom: 100px; display: flex; flex-direction: column; gap: 40px; }
+.clients .card-grid { grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); }
+.client {
+  margin: 0; background: var(--white); border: 2px solid var(--ink); border-radius: 26px; padding: 28px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.client blockquote {
+  margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 22px; line-height: 1.3; letter-spacing: -0.01em;
+}
+.client blockquote::before { content: "“"; display: block; font-weight: 800; font-size: 56px; line-height: .6; color: var(--rind); margin-bottom: 8px; }
+.client figcaption { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: center; }
+.client__avatar {
+  grid-row: span 2; width: 52px; height: 52px; border-radius: 50%; background: var(--zest); border: 2px solid var(--ink);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  font-family: var(--font-display); font-weight: 800; font-size: 18px;
+}
+.client__avatar img { width: 100%; height: 100%; object-fit: cover; }
+.client__name { font-family: var(--font-display); font-size: 22px; }
+.client__service { font-size: 14px; color: var(--text-muted); }
+@media (max-width: 600px) { .clients { padding-bottom: 72px; gap: 32px; } }
+
+/* ---------- About ---------- */
+.about { padding-bottom: 100px; }
+.about__card {
+  background: var(--white); border: 2px solid var(--ink); border-radius: 36px; padding: clamp(28px, 5vw, 64px);
+  display: flex; flex-wrap: wrap; gap: 40px 56px; align-items: center;
+}
+.about__intro { flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+.about__intro p { margin: 0; font-size: 18px; line-height: 1.6; color: var(--text-muted); max-width: 640px; }
+.about__intro p strong { color: var(--ink); }
+.about__offices { flex: 1 1 260px; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.about__offices li {
+  display: flex; flex-direction: column; gap: 2px; padding: 16px 20px; border-radius: 18px; border: 2px solid var(--ink);
+  background: var(--pith);
+}
+.about__offices li:nth-child(1) { background: var(--zest); }
+.about__offices li:nth-child(3) { background: var(--ink); color: var(--pith); }
+.about__offices li:nth-child(3) span { color: var(--text-on-ink); }
+.about__offices strong { font-family: var(--font-display); font-size: 24px; }
+.about__offices span { font-size: 14px; color: var(--text-muted); }
+@media (max-width: 600px) { .about { padding-bottom: 72px; } .about__card { border-radius: 28px; } }
+
+/* ---------- Contact form: two send buttons ---------- */
+.contact-form__actions { grid-column: span 2; display: flex; flex-wrap: wrap; gap: 12px; }
+.contact-form__actions .btn { flex: 1 1 200px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 18px; font-size: 17px; }
+.contact-form__actions .btn--ink, .contact-form__actions .btn--ghost { border: 2px solid var(--ink); }
+.contact-form__actions .btn--ghost:hover { background: var(--pith); }
+.contact-form .contact-form__actions .btn:hover { transform: none; box-shadow: none; }
+.btn__icon { width: 20px; height: 20px; flex-shrink: 0; }
+@media (max-width: 560px) { .contact-form__actions { grid-column: auto; } }
+
+/* ---------- WhatsApp floating button ---------- */
+.wa-float {
+  position: fixed; right: 20px; bottom: 20px; z-index: 50; width: 60px; height: 60px; border-radius: 50%;
+  background: #25D366; color: var(--white); border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.wa-float svg { width: 32px; height: 32px; }
+.wa-float:hover { color: var(--white); transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+@media (max-width: 600px) { .wa-float { right: 14px; bottom: 14px; width: 54px; height: 54px; } .wa-float svg { width: 28px; height: 28px; } }
+@media (prefers-reduced-motion: reduce) { .wa-float, .wa-float:hover { transform: none; transition: none; } }
+@media print { .wa-float { display: none; } }
+
+/* ---------- Footer legal links ---------- */
+.site-footer__legal { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.site-footer__legal a { color: var(--text-on-ink); }
+.site-footer__legal a:hover { color: var(--zest); }
+.site-footer__bottom { padding-bottom: 8px; }
+@media (max-width: 600px) { .site-footer__inner { padding-bottom: 96px; } } /* room for the WhatsApp button */
+
+/* ---------- Simple text pages (privacy) ---------- */
+.legal { max-width: 760px; margin: 0 auto; padding: 32px var(--gutter) 100px; }
+.legal h1 { margin: 0 0 12px; font-family: var(--font-display); font-weight: 800; font-size: clamp(2.4rem, 5vw, 3.8rem); line-height: 1; letter-spacing: -0.035em; }
+.legal h2 { margin: 40px 0 10px; font-family: var(--font-display); font-weight: 700; font-size: 26px; }
+.legal p, .legal li { font-size: 17px; line-height: 1.7; color: var(--text-muted); }
+.legal ul { padding-left: 22px; }
+.legal__meta { font-size: 14px; color: var(--text-muted); }
+.legal__back { display: inline-block; margin-top: 32px; font-weight: 700; }

@@ -1,6 +1,45 @@
-/* LEMON — small enhancements: mobile menu, package pre-select, contact form, footer year. */
+/* LEMON — site behaviour: mobile menu, contact form (WhatsApp or email), in-page links,
+   and the projects / clients / advert sections loaded from data/*.json (edited with Pages CMS). */
 (function () {
   'use strict';
+
+  var html = document.documentElement;
+  var FR = (html.lang || '').toLowerCase().indexOf('fr') === 0;
+  var ROOT = html.getAttribute('data-root') || ''; // '' on the English page, '../' on /fr/
+  var WHATSAPP = '237656433069';
+  var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  var T = FR ? {
+    needName: 'Merci d’indiquer votre nom.',
+    needEmail: 'Merci d’indiquer une adresse e-mail valide.',
+    sending: 'Envoi…',
+    sent: 'Merci ! Votre message est bien arrivé. Nous revenons vers vous très vite avec votre audit gratuit.',
+    failed: 'Désolé, l’envoi n’a pas fonctionné. Écrivez-nous directement par e-mail ou WhatsApp.',
+    openingMail: 'Ouverture de votre messagerie… Si rien ne se passe, écrivez-nous à ',
+    openingWa: 'Ouverture de WhatsApp… Si rien ne se passe, écrivez-nous au +237 656 433 069.',
+    subject: 'Demande d’audit gratuit — ',
+    lines: ['Nom', 'E-mail', 'Besoin'],
+    hello: 'Bonjour LEMON,',
+    pkg: function (p) { return 'Bonjour LEMON, je suis intéressé(e) par l’offre ' + p + '.'; },
+    preview: ' — aperçu du projet',
+    showAd: 'Afficher l’annonce ',
+    ad: 'Publicité'
+  } : {
+    needName: 'Please add your name.',
+    needEmail: 'Please add a valid email address.',
+    sending: 'Sending…',
+    sent: 'Thanks! Your message is in. We’ll be in touch with your free audit soon.',
+    failed: 'Sorry, that didn’t go through. Please email or WhatsApp us directly instead.',
+    openingMail: 'Opening your email app… If nothing happens, email us at ',
+    openingWa: 'Opening WhatsApp… If nothing happens, message us on +237 656 433 069.',
+    subject: 'Free audit request — ',
+    lines: ['Name', 'Email', 'Need'],
+    hello: 'Hi LEMON,',
+    pkg: function (p) { return 'Hi LEMON, I’m interested in the ' + p + ' package.'; },
+    preview: ' — project preview',
+    showAd: 'Show advert ',
+    ad: 'Advertisement'
+  };
 
   /* ---------- Mobile menu ---------- */
   var toggle = document.querySelector('.nav-toggle');
@@ -25,8 +64,6 @@
   var form = document.querySelector('.contact-form');
   if (form) {
     var status = form.querySelector('.form-status');
-    var button = form.querySelector('button[type="submit"]');
-    var buttonLabel = button.textContent;
     var serviceSelect = form.querySelector('select[name="service"]');
     var messageBox = form.querySelector('textarea[name="message"]');
 
@@ -34,8 +71,8 @@
     document.querySelectorAll('[data-package]').forEach(function (link) {
       link.addEventListener('click', function () {
         var pkg = link.getAttribute('data-package');
-        if (pkg === 'Whole Lemon') serviceSelect.value = 'A bit of everything';
-        if (!messageBox.value.trim()) messageBox.value = 'Hi LEMON, I’m interested in the ' + pkg + ' package.';
+        if (pkg === 'Whole Lemon') serviceSelect.selectedIndex = serviceSelect.options.length - 1;
+        if (!messageBox.value.trim()) messageBox.value = T.pkg(pkg);
       });
     });
 
@@ -49,45 +86,51 @@
       var data = new FormData(form);
       if (data.get('_gotcha')) return; // spam bot
 
+      var via = (e.submitter && e.submitter.value) || 'email';
       var name = (data.get('name') || '').trim();
       var email = (data.get('email') || '').trim();
-      if (!name) { say('Please add your name.', true); form.elements['name'].focus(); return; }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say('Please add a valid email address.', true); form.elements['email'].focus(); return; }
+      var service = data.get('service') || '';
+      var message = (data.get('message') || '').trim();
+      if (!name) { say(T.needName, true); form.elements['name'].focus(); return; }
+      // Email address is optional for WhatsApp (they reply on WhatsApp), required for email.
+      if (via !== 'whatsapp' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say(T.needEmail, true); form.elements['email'].focus(); return; }
 
+      var summary = T.lines[0] + ': ' + name + '\n' + (email ? T.lines[1] + ': ' + email + '\n' : '') + T.lines[2] + ': ' + service + (message ? '\n\n' + message : '');
+
+      // WhatsApp: open a chat with the message already written.
+      if (via === 'whatsapp') {
+        window.open('https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(T.hello + '\n\n' + summary), '_blank', 'noopener');
+        say(T.openingWa);
+        return;
+      }
+
+      // Email, option A: a form service URL is set in action="" (e.g. Formspree) — send in the background.
       var endpoint = (form.getAttribute('action') || '').trim();
-
-      // Option A: a form service URL is set (e.g. Formspree) — send in the background.
       if (/^https?:\/\//.test(endpoint)) {
-        button.disabled = true;
-        button.textContent = 'Sending…';
+        var button = e.submitter;
+        var label = button ? button.textContent : '';
+        if (button) { button.disabled = true; button.textContent = T.sending; }
+        data.delete('via');
         say('');
         fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
           .then(function (res) {
             if (!res.ok) throw new Error('Request failed');
             form.reset();
-            say('Thanks! Your message is in. We’ll be in touch with your free audit soon.');
+            say(T.sent);
           })
-          .catch(function () {
-            say('Sorry, that didn’t go through. Please email us directly instead.', true);
-          })
-          .then(function () {
-            button.disabled = false;
-            button.textContent = buttonLabel;
-          });
+          .catch(function () { say(T.failed, true); })
+          .then(function () { if (button) { button.disabled = false; button.textContent = label; } });
         return;
       }
 
-      // Option B: no form service — open the visitor's email app with everything filled in.
+      // Email, option B: open the visitor's email app with everything filled in.
       var to = form.getAttribute('data-email') || '';
-      var subject = 'Free audit request — ' + data.get('service');
-      var body = 'Name: ' + name + '\nEmail: ' + email + '\nService: ' + data.get('service') + '\n\n' + (data.get('message') || '');
-      window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-      say('Opening your email app… If nothing happens, email us at ' + to + '.');
+      window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent(T.subject + service) + '&body=' + encodeURIComponent(summary);
+      say(T.openingMail + to + '.');
     });
   }
 
   /* ---------- In-page links: scroll without adding "#section" to the web address ---------- */
-  var smooth = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   document.addEventListener('click', function (e) {
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     var link = e.target.closest('a[href^="#"]');
@@ -97,9 +140,9 @@
     if (id && !target) return;
     e.preventDefault();
     if (!target || id === 'top') {
-      window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
     } else {
-      target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
+      target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
     }
     // Move keyboard focus to the section too, for screen-reader and keyboard users.
     var focusEl = target || document.getElementById('main');
@@ -118,14 +161,11 @@
   /* ---------- Footer year ---------- */
   var year = document.querySelector('[data-year]');
   if (year) year.textContent = new Date().getFullYear();
-})();
 
-/* LEMON — projects and advert banner, loaded from data/*.json (edited with Pages CMS). */
-(function () {
-  'use strict';
-
+  /* =====================================================================
+     Content from data/*.json (edited with Pages CMS)
+     ===================================================================== */
   var COLOURS = ['ink', 'zest', 'leaf'];
-  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function el(tag, cls, text) {
     var node = document.createElement(tag);
@@ -134,6 +174,8 @@
     return node;
   }
   function clean(v) { return typeof v === 'string' ? v.trim() : ''; }
+  // French page: use the "_fr" version of a field when it has been filled in.
+  function pick(item, key) { return (FR && clean(item[key + '_fr'])) || clean(item[key]); }
   // Only allow normal web links, email/phone links and on-page links.
   function safeLink(url) {
     url = clean(url);
@@ -142,13 +184,22 @@
     if (/^[a-z0-9.-]+\.[a-z]{2,}(\/.*)?$/i.test(url)) return 'https://' + url; // "example.com" -> https://example.com
     return '';
   }
+  // Pictures uploaded in the editor are saved as "assets/uploads/…"; adjust for the /fr/ page.
+  function asset(src) {
+    src = clean(src);
+    if (!src || /^(https?:|data:|\/)/i.test(src)) return src;
+    return ROOT + src;
+  }
   function isExternal(url) { return /^https?:/i.test(url); }
   function colour(v) { return COLOURS.indexOf(v) > -1 ? v : 'ink'; }
   function load(path) {
-    return fetch(path, { cache: 'no-cache' }).then(function (r) {
+    return fetch(ROOT + path, { cache: 'no-cache' }).then(function (r) {
       if (!r.ok) throw new Error(path);
       return r.json();
     });
+  }
+  function initials(name) {
+    return name.split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join('');
   }
 
   /* ---------- Projects ---------- */
@@ -167,18 +218,18 @@
           if (isExternal(link)) { card.target = '_blank'; card.rel = 'noopener'; }
         }
         var media = el('div', 'project__media project__media--' + colour(p.colour));
-        var img = clean(p.image);
+        var img = asset(p.image);
         if (img) {
           var image = el('img');
           image.src = img;
-          image.alt = clean(p.title) + ' — project preview';
+          image.alt = clean(p.title) + T.preview;
           image.loading = 'lazy';
           media.appendChild(image);
         } else {
           media.appendChild(el('span', 'project__site', link && isExternal(link) ? link.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '') : clean(p.title)));
         }
         card.appendChild(media);
-        if (clean(p.services)) card.appendChild(el('span', 'project__meta', clean(p.services)));
+        if (pick(p, 'services')) card.appendChild(el('span', 'project__meta', pick(p, 'services')));
         var title = el('strong', null, clean(p.title));
         if (link && isExternal(link)) {
           title.appendChild(document.createTextNode(' '));
@@ -189,8 +240,44 @@
         card.appendChild(title);
         grid.appendChild(card);
       });
-      // Keep the "your project here" card while there are fewer than 3 projects.
+      // Keep the "your project here" card while the last row isn't full.
       if (nextCard && items.length % 3 !== 0) grid.appendChild(nextCard);
+    }).catch(function () { /* keep the built-in cards */ });
+  }
+
+  /* ---------- Clients ---------- */
+  var clientGrid = document.querySelector('[data-testimonials]');
+  if (clientGrid) {
+    load('data/testimonials.json').then(function (data) {
+      var items = (data && Array.isArray(data.testimonials) ? data.testimonials : []).filter(function (t) {
+        return clean(t.name) && t.show !== false;
+      });
+      if (!items.length) return; // keep the built-in cards
+      clientGrid.textContent = '';
+      items.forEach(function (t) {
+        var card = el('figure', 'client');
+        var quote = pick(t, 'quote');
+        if (quote) card.appendChild(el('blockquote', null, quote));
+        var cap = el('figcaption');
+        var avatar = el('span', 'client__avatar');
+        avatar.setAttribute('aria-hidden', 'true');
+        var photo = asset(t.photo);
+        if (photo) {
+          var img = el('img');
+          img.src = photo;
+          img.alt = '';
+          img.loading = 'lazy';
+          avatar.appendChild(img);
+        } else {
+          avatar.textContent = initials(clean(t.name));
+        }
+        cap.appendChild(avatar);
+        cap.appendChild(el('strong', 'client__name', clean(t.name)));
+        var line = [pick(t, 'role'), pick(t, 'service')].filter(Boolean).join(' · ');
+        if (line) cap.appendChild(el('span', 'client__service', line));
+        card.appendChild(cap);
+        clientGrid.appendChild(card);
+      });
     }).catch(function () { /* keep the built-in cards */ });
   }
 
@@ -199,30 +286,31 @@
   if (slot) {
     load('data/ads.json').then(function (data) {
       var ads = (data && Array.isArray(data.ads) ? data.ads : []).filter(function (a) {
-        return a.show !== false && (clean(a.headline) || clean(a.image));
+        return a.show !== false && (pick(a, 'headline') || clean(a.image));
       });
       if (!ads.length) return;
 
       var slides = ads.map(function (a) {
         var link = safeLink(a.link);
-        var img = clean(a.image);
+        var img = asset((FR && clean(a.image_fr)) || a.image);
+        var label = pick(a, 'label');
         var slide;
         if (img) {
           slide = el(link ? 'a' : 'div', 'ad ad--image');
           var image = el('img');
           image.src = img;
-          image.alt = clean(a.headline) || 'Advertisement';
+          image.alt = pick(a, 'headline') || T.ad;
           image.loading = 'lazy';
           slide.appendChild(image);
-          if (clean(a.label)) slide.appendChild(el('span', 'ad__label ad__label--float', clean(a.label)));
+          if (label) slide.appendChild(el('span', 'ad__label ad__label--float', label));
         } else {
           slide = el(link ? 'a' : 'div', 'ad ad--' + colour(a.style));
           var copy = el('div', 'ad__copy');
-          if (clean(a.label)) copy.appendChild(el('span', 'ad__label', clean(a.label)));
-          copy.appendChild(el('strong', 'ad__headline', clean(a.headline)));
-          if (clean(a.text)) copy.appendChild(el('span', 'ad__text', clean(a.text)));
+          if (label) copy.appendChild(el('span', 'ad__label', label));
+          copy.appendChild(el('strong', 'ad__headline', pick(a, 'headline')));
+          if (pick(a, 'text')) copy.appendChild(el('span', 'ad__text', pick(a, 'text')));
           slide.appendChild(copy);
-          if (link && clean(a.button_text)) slide.appendChild(el('span', 'ad__button', clean(a.button_text) + ' →'));
+          if (link && pick(a, 'button_text')) slide.appendChild(el('span', 'ad__button', pick(a, 'button_text') + ' →'));
         }
         if (link) {
           slide.href = link;
@@ -246,7 +334,7 @@
         slides.forEach(function (_, i) {
           var b = el('button', 'ad-dot');
           b.type = 'button';
-          b.setAttribute('aria-label', 'Show advert ' + (i + 1));
+          b.setAttribute('aria-label', T.showAd + (i + 1));
           b.setAttribute('aria-current', i === 0 ? 'true' : 'false');
           b.addEventListener('click', function () { show(i); });
           dots.appendChild(b);

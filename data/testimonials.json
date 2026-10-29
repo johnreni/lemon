@@ -1,0 +1,26 @@
+{
+  "testimonials": [
+    {
+      "show": true,
+      "name": "Foyet Samuel",
+      "role": "",
+      "role_fr": "",
+      "service": "SEO",
+      "service_fr": "SEO",
+      "quote": "",
+      "quote_fr": "",
+      "photo": ""
+    },
+    {
+      "show": true,
+      "name": "Betrand Lewis",
+      "role": "",
+      "role_fr": "",
+      "service": "Website",
+      "service_fr": "Site web",
+      "quote": "",
+      "quote_fr": "",
+      "photo": ""
+    }
+  ]
+}
