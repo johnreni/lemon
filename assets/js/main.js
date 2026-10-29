@@ -158,6 +158,44 @@
     if (document.readyState === 'complete') tidy(); else window.addEventListener('load', tidy);
   }
 
+  /* ---------- Header: hairline appears once the page scrolls ---------- */
+  var header = document.querySelector('.site-header');
+  if (header) {
+    var onScroll = function () { header.classList.toggle('is-scrolled', window.scrollY > 8); };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  /* ---------- Scroll-in animation: sections fade and rise gently as they appear ---------- */
+  var REVEAL = '.section-head, .process .h2, .service-card, .steps li, .project, .client, .ad-slot .ad:not([hidden]), .package, .about__card, .contact__card';
+  var observer = null;
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var node = entry.target;
+        node.classList.add('is-visible');
+        observer.unobserve(node);
+        // After it has appeared, drop the stagger delay so hover effects respond instantly.
+        setTimeout(function () { node.style.removeProperty('--d'); }, 1400);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  }
+  function revealIn(root) {
+    if (!observer) return;
+    var items = root.matches && root.matches(REVEAL) ? [root] : [].slice.call(root.querySelectorAll(REVEAL));
+    items.forEach(function (node) {
+      if (node.classList.contains('reveal')) return;
+      // Stagger cards that sit side by side in the same grid.
+      var siblings = node.parentElement ? [].slice.call(node.parentElement.children) : [];
+      var index = Math.max(0, siblings.indexOf(node));
+      node.style.setProperty('--d', (Math.min(index, 5) * 0.08) + 's');
+      node.classList.add('reveal');
+      observer.observe(node);
+    });
+  }
+  revealIn(document);
+
   /* ---------- Footer year ---------- */
   var year = document.querySelector('[data-year]');
   if (year) year.textContent = new Date().getFullYear();
@@ -242,6 +280,7 @@
       });
       // Keep the "your project here" card while the last row isn't full.
       if (nextCard && items.length % 3 !== 0) grid.appendChild(nextCard);
+      revealIn(grid);
     }).catch(function () { /* keep the built-in cards */ });
   }
 
@@ -278,6 +317,7 @@
         card.appendChild(cap);
         clientGrid.appendChild(card);
       });
+      revealIn(clientGrid);
     }).catch(function () { /* keep the built-in cards */ });
   }
 
@@ -321,6 +361,7 @@
 
       slides.forEach(function (s, i) { if (i) s.hidden = true; slot.appendChild(s); });
       slot.hidden = false;
+      revealIn(slot);
 
       // Several adverts: show each for 7 seconds; pause while the visitor hovers or focuses the banner.
       if (slides.length > 1) {
