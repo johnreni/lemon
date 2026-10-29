@@ -2,10 +2,10 @@
   "projects": [
     {
       "title": "Drako Electronics",
-      "services": "Website",
-      "services_fr": "Site web",
+      "services": "Website · E-commerce",
+      "services_fr": "Site web · E-commerce",
       "link": "https://drakoelectronics.com",
-      "image": "",
+      "image": "assets/uploads/drako-electronics.jpg",
       "colour": "ink"
     }
   ]

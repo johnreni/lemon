@@ -428,6 +428,8 @@ main { overflow-x: clip; } /* keeps decorative glows from causing sideways scrol
 .project:not(.project--next) .project__media--zest::before,
 .project:not(.project--next) .project__media--leaf::before { background-color: rgba(255, 255, 255, .25); }
 .project__media img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.project:not(.project--next) .project__media img { position: absolute; left: 0; right: 0; bottom: 0; top: 38px; height: calc(100% - 38px); object-position: left top; }
+.project:not(.project--next) .project__media:has(img) { background: #1C2016; }
 .project:hover .project__media { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
 @media (prefers-reduced-motion: reduce) { .project__media, .project:hover .project__media { transform: none; transition: none; } }
 .project__media--zest { background: linear-gradient(160deg, var(--zest-soft), var(--zest) 60%, var(--rind)); color: var(--ink); }
