@@ -6,7 +6,7 @@
   var html = document.documentElement;
   var FR = (html.lang || '').toLowerCase().indexOf('fr') === 0;
   var ROOT = html.getAttribute('data-root') || ''; // '' on the English page, '../' on /fr/
-  var WHATSAPP = '237656433069';
+  var WHATSAPP = '237656433068';
   var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   var T = FR ? {
@@ -16,7 +16,7 @@
     sent: 'Merci ! Votre message est bien arrivé. Nous revenons vers vous très vite avec votre audit gratuit.',
     failed: 'Désolé, l’envoi n’a pas fonctionné. Écrivez-nous directement par e-mail ou WhatsApp.',
     openingMail: 'Ouverture de votre messagerie… Si rien ne se passe, écrivez-nous à ',
-    openingWa: 'Ouverture de WhatsApp… Si rien ne se passe, écrivez-nous au +237 656 433 069.',
+    openingWa: 'Ouverture de WhatsApp… Si rien ne se passe, écrivez-nous au +237 656 433 068.',
     subject: 'Demande d’audit gratuit — ',
     lines: ['Nom', 'E-mail', 'Besoin'],
     hello: 'Bonjour LEMON,',
@@ -31,7 +31,7 @@
     sent: 'Thanks! Your message is in. We’ll be in touch with your free audit soon.',
     failed: 'Sorry, that didn’t go through. Please email or WhatsApp us directly instead.',
     openingMail: 'Opening your email app… If nothing happens, email us at ',
-    openingWa: 'Opening WhatsApp… If nothing happens, message us on +237 656 433 069.',
+    openingWa: 'Opening WhatsApp… If nothing happens, message us on +237 656 433 068.',
     subject: 'Free audit request — ',
     lines: ['Name', 'Email', 'Need'],
     hello: 'Hi LEMON,',
