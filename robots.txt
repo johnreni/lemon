@@ -1,2 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /design-source/
+
+Sitemap: https://getlemondigital.com/sitemap.xml

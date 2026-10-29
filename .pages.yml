@@ -1,5 +1,6 @@
 # Settings for the online editor at https://app.pagescms.org
-# It lets you update projects and adverts from your browser (see README).
+# It lets you update projects, clients and adverts from your browser (see README).
+# Fields ending in "(French)" are used on the French page; leave them empty to reuse the English text.
 
 media:
   input: assets/uploads
@@ -23,6 +24,9 @@ content:
           - name: services
             label: "What you did (for example: Website · SEO)"
             type: string
+          - name: services_fr
+            label: "What you did (French) — for example: Site web · SEO"
+            type: string
           - name: link
             label: "Website link (for example: https://drakoelectronics.com) — optional"
             type: string
@@ -37,6 +41,45 @@ content:
                 - { value: ink, label: Ink (dark) }
                 - { value: zest, label: Zest (yellow) }
                 - { value: leaf, label: Leaf (green) }
+
+  - name: clients
+    label: Clients & reviews
+    type: file
+    path: data/testimonials.json
+    fields:
+      - name: testimonials
+        label: Clients — only add words a client actually said or wrote to you
+        type: object
+        list: true
+        fields:
+          - name: show
+            label: Show on the site
+            type: boolean
+          - name: name
+            label: Client name
+            type: string
+            required: true
+          - name: role
+            label: "Their job or business — optional (for example: Owner, Drako Electronics)"
+            type: string
+          - name: role_fr
+            label: Their job or business (French) — optional
+            type: string
+          - name: service
+            label: "Service you provided (for example: SEO)"
+            type: string
+          - name: service_fr
+            label: "Service you provided (French) — for example: Site web"
+            type: string
+          - name: quote
+            label: Their review, in their own words — optional
+            type: text
+          - name: quote_fr
+            label: Their review (French) — optional
+            type: text
+          - name: photo
+            label: Photo — optional, square works best (with their permission)
+            type: image
 
   - name: adverts
     label: Advert banner
@@ -54,21 +97,36 @@ content:
           - name: label
             label: "Small label (for example: Offer, Sponsored, New)"
             type: string
+          - name: label_fr
+            label: "Small label (French) — for example: Offre, Sponsorisé, Nouveau"
+            type: string
           - name: headline
             label: Headline
             type: string
             required: true
+          - name: headline_fr
+            label: Headline (French)
+            type: string
           - name: text
             label: Short description
             type: text
+          - name: text_fr
+            label: Short description (French)
+            type: text
           - name: button_text
             label: Button text
+            type: string
+          - name: button_text_fr
+            label: Button text (French)
             type: string
           - name: link
             label: "Button link (a web address, or #contact for your contact form)"
             type: string
           - name: image
             label: "Banner picture — optional. If added, the picture is shown instead of the text design (wide, about 1200 × 300)"
+            type: image
+          - name: image_fr
+            label: Banner picture for the French page — optional
             type: image
           - name: style
             label: Colour style (for text adverts)

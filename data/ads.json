@@ -3,11 +3,16 @@
     {
       "show": true,
       "label": "Offer",
+      "label_fr": "Offre",
       "headline": "Free website & ads audit",
+      "headline_fr": "Audit gratuit de votre site et de vos pubs",
       "text": "We review your website, ads and social channels and send you a clear plan to grow — free, no strings attached.",
+      "text_fr": "Nous analysons votre site, vos publicités et vos réseaux sociaux, puis nous vous envoyons un plan clair pour grandir — gratuitement et sans engagement.",
       "button_text": "Get my free audit",
+      "button_text_fr": "Obtenir mon audit gratuit",
       "link": "#contact",
       "image": "",
+      "image_fr": "",
       "style": "ink"
     }
   ]
