@@ -196,6 +196,25 @@
   }
   revealIn(document);
 
+  /* ---------- Menu: highlight the section currently on screen ---------- */
+  if (nav && 'IntersectionObserver' in window) {
+    var links = {};
+    [].slice.call(nav.querySelectorAll('a[href^="#"]')).forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var link = links[entry.target.id];
+        if (!link) return;
+        if (entry.isIntersecting) {
+          Object.keys(links).forEach(function (k) { links[k].removeAttribute('aria-current'); });
+          link.setAttribute('aria-current', 'true');
+        } else if (link.getAttribute('aria-current') === 'true') {
+          link.removeAttribute('aria-current');
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    Object.keys(links).forEach(function (id) { var sec = document.getElementById(id); if (sec) spy.observe(sec); });
+  }
+
   /* ---------- Footer year ---------- */
   var year = document.querySelector('[data-year]');
   if (year) year.textContent = new Date().getFullYear();
@@ -262,6 +281,7 @@
           image.src = img;
           image.alt = clean(p.title) + T.preview;
           image.loading = 'lazy';
+          image.decoding = 'async';
           media.appendChild(image);
         } else {
           media.appendChild(el('span', 'project__site', link && isExternal(link) ? link.replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '') : clean(p.title)));
@@ -341,6 +361,7 @@
           image.src = img;
           image.alt = pick(a, 'headline') || T.ad;
           image.loading = 'lazy';
+          image.decoding = 'async';
           slide.appendChild(image);
           if (label) slide.appendChild(el('span', 'ad__label ad__label--float', label));
         } else {
