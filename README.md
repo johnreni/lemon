@@ -64,7 +64,7 @@ Nothing needs uploading to Hostinger: changes on GitHub or in Pages CMS go live 
 
 ## Contact form
 
-Visitors choose **Send on WhatsApp** (opens WhatsApp with their message written, to +237 656 433 069) or **Send by email**.
+Visitors choose **Send on WhatsApp** (opens WhatsApp with their message written, to +237 656 433 068) or **Send by email**.
 By default, *Send by email* opens the visitor's email app. To receive emails directly instead, create a free form at [formspree.io](https://formspree.io)
 with info@getlemondigital.com, then paste the form URL it gives you into `action=""` on the `<form>` tag **in both `index.html` and `fr/index.html`**,
 for example `action="https://formspree.io/f/abcd1234"`.
